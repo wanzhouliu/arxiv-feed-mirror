@@ -22,11 +22,14 @@ jobs:
           python-version: '3.11'
 
       - name: Fetch today's feed
-        run: |
-          mkdir -p feed
-          DATE=$(date -u +%F)
-          python3 fetch_arxiv.py > "feed/${DATE}.json"
-          echo "Generated feed/${DATE}.json, size: $(wc -c < feed/${DATE}.json) bytes"
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: |
+            mkdir -p feed
+            DATE=$(date -u +%F)
+            python3 fetch_arxiv.py > "feed/${DATE}.json"
 
       - name: Commit and push
         run: |
