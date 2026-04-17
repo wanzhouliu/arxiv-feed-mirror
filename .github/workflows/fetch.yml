@@ -8,6 +8,10 @@ on:
 
 permissions:
   contents: write
+  
+concurrency:
+  group: fetch-arxiv
+  cancel-in-progress: false
 
 jobs:
   fetch:
